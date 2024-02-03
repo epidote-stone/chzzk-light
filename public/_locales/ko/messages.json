@@ -1,0 +1,10 @@
+{
+  "extensionDescription": {
+    "description": "Extension description",
+    "message": "치지직 플랫폼 확장 프로그램"
+  },
+  "extensionName": {
+    "description": "Extension name",
+    "message": "치지직 라이트"
+  }
+}
