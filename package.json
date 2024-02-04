@@ -1,11 +1,11 @@
 {
-  "name": "chrome-extension-boilerplate-react-vite",
-  "version": "0.0.1",
-  "description": "chrome extension boilerplate",
+  "name": "chzzk-light",
+  "version": "0.0.2",
+  "description": "",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite.git"
+    "url": "https://github.com/epidote-stone/chzzk-light.git"
   },
   "scripts": {
     "build": "tsc --noEmit && vite build",
@@ -58,6 +58,7 @@
     "jsdom": "^22.1.0",
     "lint-staged": "15.2.0",
     "npm-run-all": "4.1.5",
+    "pnpm": "^8.15.1",
     "prettier": "3.1.0",
     "rollup": "4.3.0",
     "sass": "1.69.5",
