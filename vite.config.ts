@@ -52,10 +52,8 @@ export default defineConfig({
     emptyOutDir: !isDev,
     rollupOptions: {
       input: {
-        contentInjected: resolve(pagesDir, 'content', 'injected', 'index.ts'),
-        contentUI: resolve(pagesDir, 'content', 'ui', 'index.ts'),
+        contentPreview: resolve(pagesDir, 'content', 'preview', 'index.ts'),
         background: resolve(pagesDir, 'background', 'index.ts'),
-        contentStyle: resolve(pagesDir, 'content', 'style.scss'),
       },
       output: {
         entryFileNames: 'src/pages/[name]/index.js',
