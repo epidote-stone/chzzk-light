@@ -1,23 +1,116 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+import LiveContainer from './LiveContainer';
 
 export default function App() {
+  async function getLiveDetail(liveID) {
+    const response = await fetch(`https://api.chzzk.naver.com/service/v2/channels/${liveID}/live-detail`)
+    const result   = await response.json()
+    const imageURL = result.content.liveImageUrl.replace('{type}', '480')
+    return imageURL
+  }
+
+  function infoElementController(url) {
+    // 라이브 정보 엘리멘트 조회
+    const infoElement = document.querySelector('.navigator_inner__fR6Zm');
+    
+    if (!infoElement || infoElement.querySelector('img')) { return }
+
+    // 이미지 엘리멘트 생성
+    const infoPreviewElement = document.createElement('img');
+    infoPreviewElement.setAttribute('src', url);
+    infoPreviewElement.setAttribute('alt', 'Preview Image');
+    infoPreviewElement.classList.add('previewImage')
+    infoPreviewElement.style.width = '176px'
+
+    // 부모 엘리멘트에 이미지 추가
+    infoElement.appendChild(infoPreviewElement);
+  }
+  
+
   useEffect(() => {
-    console.log('content view loaded');
+    // 라이브 데이터 모음
+    const container = new LiveContainer();
 
-    document.addEventListener('mouseenter', function (event) {
-      // Event 타겟을 HTMLElement로 캐스팅
-      var hoveredElement = event.target as HTMLElement;
+    container.addData({ time: new Date(), id: 'uniqueId', url: 'example.com' });
 
-      // 클래스가 엘리먼트 또는 하위 요소에 마우스가 올라가면
-      if (hoveredElement.closest('.navigator_item__qXlq9')) {
-        // 엘리먼트의 데이터를 가져오거나 조작할 수 있음
-        var elementData = hoveredElement.textContent;
+    container.addData({ time: new Date(), id: 'uniqueId', url: 'saaaaa.com' });
 
-        console.log("호버된 엘리먼트 데이터:", elementData);
+    console.log(container.state.data)
+
+    console.log(container.getDataById('uniqueId'))
+
+
+    // 채널 탭에 마우스 호버 시
+    document.addEventListener('mouseover', async function (event) {
+      // 채널 메뉴 호버 유무 확인
+      const hoverElementSelector = '.navigator_item__qXlq9'
+      const targetElement = event.target as HTMLElement
+      
+      // 엘리멘트 조회 여부
+      if (!targetElement || typeof targetElement.matches !== 'function') { return }
+      const closestHoverElement = targetElement.closest(hoverElementSelector)
+      if (!closestHoverElement || !(closestHoverElement instanceof HTMLAnchorElement)) { return }
+      if (!closestHoverElement.href.includes('/live/')) { return }
+
+      // 호버한 방송 데이터 출력
+      const hoverID  = closestHoverElement.href.replace('https://chzzk.naver.com/live/', '')
+      // container.addData(hover)
+      const hoverURL = await getLiveDetail(hoverID)
+
+      infoElementController(hoverURL)
+
+      /* 
+      const liveInfo = document.querySelector('.navigator_inner__fR6Zm');
+      if (liveInfo && !liveInfo.querySelector('img')) {
+        if (getInquiryStatus(nowHoverLive, liveData)) {
+          const response = await getStreamData(lastHoverLive)
+          const image = response.content.liveImageUrl.replace('{type}', '480')
+
+          const previewImage = document.createElement('img');
+          previewImage.setAttribute('src', image);
+          previewImage.setAttribute('alt', 'Image Description');
+          previewImage.classList.add('previewImage')
+          previewImage.style.width = '176px'
+
+          // 이미지를 부모 엘리먼트에 추가
+          liveInfo.appendChild(previewImage);
+        }
       }
+
+
+      // Element가 
+      if (targetElement && typeof targetElement.matches === 'function') {
+          const closestHoverElement = targetElement.closest(hoverElementSelector)
+          if (closestHoverElement && closestHoverElement instanceof HTMLAnchorElement) {
+              if ( closestHoverElement.href.includes('/live/') ) {
+                const nowHoverLive = closestHoverElement.href.replace('https://chzzk.naver.com/live/', '')
+
+                  const liveInfo = document.querySelector('.navigator_inner__fR6Zm');
+                  if (liveInfo && !liveInfo.querySelector('img')) {
+                    if (getInquiryStatus(nowHoverLive, liveData)) {
+                      const response = await getStreamData(lastHoverLive)
+                      const image = response.content.liveImageUrl.replace('{type}', '480')
+    
+                      const previewImage = document.createElement('img');
+                      previewImage.setAttribute('src', image);
+                      previewImage.setAttribute('alt', 'Image Description');
+                      previewImage.classList.add('previewImage')
+                      previewImage.style.width = '176px'
+    
+                      // 이미지를 부모 엘리먼트에 추가
+                      liveInfo.appendChild(previewImage);
+                    }
+                  }
+              }
+          }
+
+      }
+      */
+
     });
 
 
+    /*
     // MutationObserver 생성
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
@@ -40,6 +133,7 @@ export default function App() {
               if (!liveInfo.querySelector('img')) {
 
                 // let streamerURL = `https://api.chzzk.naver.com/service/v2/channels/${a}/live-detail`
+
                 const previewImage = document.createElement('img');
                 previewImage.setAttribute('src', 'https://livecloud-thumb.akamaized.net/chzzk/livecloud/KR/stream/26479452/live/4271072/record/24773341/thumbnail/image_480.jpg');
                 previewImage.setAttribute('alt', 'Image Description');
@@ -68,6 +162,8 @@ export default function App() {
     return () => {
       observer.disconnect();
     };
+
+    */
   }, []);
-  return <div className="">content view</div>;
+  return null; // 렌더링할 내용이 없는 경우
 }
