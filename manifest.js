@@ -20,7 +20,7 @@ const manifest = {
   },
   content_scripts: [
     {
-      matches: ['http://*/*', 'https://*/*', '<all_urls>'],
+      matches: ['http://chzzk.naver.com/*', 'https://chzzk.naver.com/*', '<all_urls>'],
       js: ['src/pages/contentPreview/index.js'],
     },
   ],
